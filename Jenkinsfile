@@ -33,7 +33,7 @@ pipeline {
         stage('Build docker image') {
             steps{
                 dir('lesson-1') {
-                    sh 'docker build -t percyvelle2/jenkins-images:0.5 .'
+                    sh 'docker build -t percyvelle2/jenkins-images:0.6 .'
                 }
             }
         }
@@ -41,7 +41,7 @@ pipeline {
             steps{
                 withDockerRegistry(credentialsId: 'dockerhub-cred-percyvelle2', url: 'https://index.docker.io/v1/') {
                     sh '''
-                        docker push percyvelle2/jenkins-images:0.5
+                        docker push percyvelle2/jenkins-images:0.6
                     '''
                 }
             }
