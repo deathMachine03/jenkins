@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Delete docker image locally') {
             steps{
-                sh 'docker rmi percyvelle2/jenkins-images:0.5'
+                sh 'docker rmi percyvelle2/jenkins-images:0.4'
             }
         }
     }
