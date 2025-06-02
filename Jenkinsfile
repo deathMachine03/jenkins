@@ -33,7 +33,7 @@ pipeline {
         stage('Build docker image') {
             steps{
                 dir('lesson-1') {
-                    sh 'docker build -t percyvelle2/jenkins-images:0.4 .'
+                    sh 'docker build -t percyvelle2/jenkins-images:0.5 .'
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Delete docker image locally') {
             steps{
-                sh 'docker rmi percyvelle2/jenkins-images:0.4'
+                sh 'docker rmi percyvelle2/jenkins-images:0.5'
             }
         }
     }
