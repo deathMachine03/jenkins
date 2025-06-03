@@ -1,55 +1,50 @@
 pipeline {
     agent { label 'debian' }
 
+    environment {
+        DEPLOY_DIR = '/home/curs/tender/wwwroot'
+        GIT_REPO = 'https://github.com/deathMachine03/TenderAdminReact.git'
+        BRANCH = 'main'
+    }
+
     stages {
-        stage('Docker version') {
-            steps {
-                sh "echo $USER"
-                sh 'docker version'
-            }
-        }
-        stage('Delete workspace before build starts') {
-            steps {
-                echo 'Deleting workspace'
-                deleteDir()
-            }
-        }
         stage('Checkout') {
-            steps{
-                git branch: 'main',
-                    url: 'https://github.com/bakavets/docker-lessons.git'        
-                }
-        }
-        stage('Test') {
-            steps{
-                dir('lesson-1') {
-                    sh "ls -la "
-                    sh "pwd"
-                }
-                    sh "ls -la "
-                    sh "pwd"
+            steps {
+                git url: "${env.GIT_REPO}", branch: "${env.BRANCH}"
             }
         }
-        stage('Build docker image') {
-            steps{
-                dir('lesson-1') {
-                    sh 'docker build -t percyvelle2/jenkins-images:0.6 .'
-                }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
             }
         }
-        stage('Push docker image to DockerHub') {
-            steps{
-                withDockerRegistry(credentialsId: 'dockerhub-cred-percyvelle2', url: 'https://index.docker.io/v1/') {
-                    sh '''
-                        docker push percyvelle2/jenkins-images:0.6
-                    '''
-                }
+
+        stage('Build React app') {
+            steps {
+                sh 'npm run build'
             }
         }
-        stage('Delete docker image locally') {
-            steps{
-                sh 'docker rmi percyvelle2/jenkins-images:0.6'
+
+        stage('Clean old files') {
+            steps {
+                sh "rm -rf ${DEPLOY_DIR}/*"
             }
+        }
+
+        stage('Deploy to server') {
+            steps {
+                sh "cp -r build/* ${DEPLOY_DIR}/"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed.'
         }
     }
 }
