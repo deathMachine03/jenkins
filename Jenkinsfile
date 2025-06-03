@@ -3,13 +3,14 @@ pipeline {
 
     environment {
         DEPLOY_DIR = '/home/curs/tender/wwwroot'
-        GIT_REPO = 'https://github.com/deathMachine03/TenderAdminReact.git'
+        GIT_REPO = 'https://github.com/deathMachine03/my-project.git'
         BRANCH = 'main'
     }
 
     stages {
         stage('Checkout') {
             steps {
+                // Клонируем репозиторий с проектом
                 git url: "${env.GIT_REPO}", branch: "${env.BRANCH}"
             }
         }
