@@ -10,7 +10,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Клонируем репозиторий с проектом
                 git url: "${env.GIT_REPO}", branch: "${env.BRANCH}"
             }
         }
@@ -35,7 +34,7 @@ pipeline {
 
         stage('Deploy to server') {
             steps {
-                sh "cp -r build/* ${DEPLOY_DIR}/"
+                sh "cp -r dist/* ${DEPLOY_DIR}/"
             }
         }
     }
